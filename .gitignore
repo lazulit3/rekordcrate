@@ -4,3 +4,5 @@
 /data/*/Contents/**/*.mp3
 # KUVO profile files (because they apparently contain a key?)
 /data/*/PIONEER/djprofile.nxs
+# TODO: Look into adding a `master.db` from RekordBox (if data is not sensitive).
+/data/master_db/*

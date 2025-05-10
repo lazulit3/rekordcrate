@@ -54,6 +54,16 @@ enum Commands {
         #[arg(value_name = "XML_FILE")]
         path: PathBuf,
     },
+    /// Dump an unencrypted copy of Rekordbox's master.db database.
+    #[cfg(feature = "master-db")]
+    DumpMasterDB {
+        /// Path to the encrypted master.db file
+        #[arg(value_name = "MASTER_DB")]
+        master_db: PathBuf,
+        /// Path where the unencrypted database should be written
+        #[arg(value_name = "OUTPUT_DB")]
+        output: PathBuf,
+    },
 }
 
 fn list_playlists(path: &PathBuf) -> rekordcrate::Result<()> {
@@ -175,6 +185,15 @@ fn dump_xml(path: &PathBuf) -> rekordcrate::Result<()> {
     Ok(())
 }
 
+#[cfg(feature = "master-db")]
+async fn dump_master_db(
+    master_db: &std::path::Path,
+    output: &std::path::Path,
+) -> rekordcrate::Result<()> {
+    use rekordcrate::master_db::decrypt_to_file;
+    decrypt_to_file(master_db, output).await
+}
+
 fn main() -> rekordcrate::Result<()> {
     let cli = Cli::parse();
 
@@ -184,5 +203,13 @@ fn main() -> rekordcrate::Result<()> {
         Commands::DumpANLZ { path } => dump_anlz(path),
         Commands::DumpSetting { path } => dump_setting(path),
         Commands::DumpXML { path } => dump_xml(path),
+        #[cfg(feature = "master-db")]
+        Commands::DumpMasterDB {
+            master_db: input,
+            output,
+        } => {
+            let rt = tokio::runtime::Runtime::new()?;
+            rt.block_on(dump_master_db(input, output))
+        }
     }
 }

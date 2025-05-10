@@ -24,6 +24,8 @@
 #![cfg_attr(not(debug_assertions), deny(clippy::used_underscore_binding))]
 
 pub mod anlz;
+#[cfg(feature = "master-db")]
+pub mod master_db;
 pub mod pdb;
 pub mod setting;
 pub mod util;
