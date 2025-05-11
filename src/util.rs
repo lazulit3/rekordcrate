@@ -10,6 +10,8 @@
 
 use crate::pdb::string::StringError;
 use binrw::binrw;
+#[cfg(feature = "master-db")]
+use sqlx;
 use thiserror::Error;
 
 /// Enumerates errors returned by this library.
@@ -27,6 +29,11 @@ pub enum RekordcrateError {
     /// Represents an `std::io::Error`.
     #[error(transparent)]
     IOError(#[from] std::io::Error),
+
+    /// Represents a failure when working with Master DB (SQLite database).
+    #[cfg(feature = "master-db")]
+    #[error(transparent)]
+    DBError(#[from] sqlx::Error),
 }
 
 /// Type alias for results where the error is a `RekordcrateError`.

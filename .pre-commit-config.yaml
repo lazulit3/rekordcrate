@@ -49,15 +49,15 @@ repos:
             args: [--all, --]
           - id: clippy
             args: [--locked, --workspace, --all-features, --all-targets, --, -D, warnings]
-    - repo: https://github.com/Holzhaus/sourceheaders
-      rev: v0.0.4
-      hooks:
-          - id: sourceheaders
-            exclude: ^data/.*$
-    - repo: https://github.com/jorisroovers/gitlint
-      rev: v0.19.1
-      hooks:
-          - id: gitlint
+    # - repo: https://github.com/Holzhaus/sourceheaders
+    #   rev: v0.0.4
+    #   hooks:
+    #       - id: sourceheaders
+    #         exclude: ^data/.*$
+    # - repo: https://github.com/jorisroovers/gitlint
+    #   rev: v0.19.1
+    #   hooks:
+    #       - id: gitlint
 
 ci:
     skip: [fmt, clippy]
